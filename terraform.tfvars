@@ -1,6 +1,6 @@
-docker_host = "unix:///var/run/docker.sock"
-volumes_host_path = "/terraform-k3d-gitlab-gitpod"
-domain = "example.com"
+docker_host = "npipe:////.//pipe//docker_engine"
+volumes_host_path = "/c/Users/Stany/Documents/terraformGitpod"
+domain = "test-gitpod.com"
 nginx_host_port = 443
 gitpod_host_port= 2443
 gitlab_host_port= 1443
