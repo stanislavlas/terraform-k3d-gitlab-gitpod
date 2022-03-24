@@ -1,0 +1,5 @@
+.terraform*
+terraform.tfstate*
+certs/*.pem
+workspaces/*
+gitlab/initRootPasswd.txt

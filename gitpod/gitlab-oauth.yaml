@@ -1,0 +1,9 @@
+id: Local GitLab
+host: gitlab.<domain>
+protocol: https
+type: GitLab
+oauth:
+  clientId: <clientId>
+  clientSecret: <clientSecret>
+  callBackUrl: https://gitpod.<domain>/auth/gitlab/callback
+  settingsUrl: gitlab.<domain>/profile/applications
