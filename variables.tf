@@ -7,7 +7,7 @@ variable "docker_host" {
 variable "volumes_host_path" {
     description = "The absolute path to the root of this project"
     type        = string
-    default     = "/terraformGitpod"
+    default     = "/terraform-k3d-gitlab-gitpod"
 }
 
 variable "domain" {
