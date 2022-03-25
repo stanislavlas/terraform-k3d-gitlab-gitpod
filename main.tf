@@ -19,17 +19,28 @@ resource "docker_image" "nginx" {
   keep_locally  = false
 }
 
-resource "docker_image" "k3s" {
-  name          = "k3s"
+resource "docker_image" "k3s_gitpod" {
+  name          = "k3s_gitpod"
   keep_locally  = false
   build {
-    path = "k3s"
+    path        = "dockerfiles"
+    dockerfile  = "Dockerfile.gitpod"
+  }
+}
+
+resource "docker_image" "k3s_gitlab" {
+  name          = "k3s_gitlab"
+  keep_locally  = false
+  build {
+    path        = "dockerfiles"
+    dockerfile  = "Dockerfile.gitlab"
   }
 }
 
 resource "docker_container" "nginx" {
   image = docker_image.nginx.latest
   name  = "reverseProxy"
+  count = var.enable_nginx ? 1 : 0
 
   volumes {
     host_path      = "${var.volumes_host_path}/certs/fullchain.pem"
@@ -61,7 +72,8 @@ resource "docker_container" "nginx" {
 resource "k3d_cluster" "gitlab" {
   name    = "gitlab"
   servers = 1
-  image   = docker_image.k3s.latest
+  count   = var.enable_gitlab ? 1 : 0
+  image   = docker_image.k3s_gitlab.latest
 
   volume {
     source      = "${var.volumes_host_path}/gitlab"
@@ -111,14 +123,15 @@ resource "k3d_cluster" "gitlab" {
 resource "k3d_cluster" "gitpod" {
   name    = "gitpod"
   servers = 1
-  image   = docker_image.k3s.latest
+  count   = var.enable_gitpod ? 1 : 0
+  image   = docker_image.k3s_gitpod.latest
 
   volume {
     source      = "${var.volumes_host_path}/workspaces"
     destination = "/var/gitpod/workspaces"
   }
 
-   volume {
+  volume {
     source      = "${var.volumes_host_path}/gitpod"
     destination = "/gitpod"
   }
@@ -141,6 +154,11 @@ resource "k3d_cluster" "gitpod" {
   env {
     key   = "CLIENT_SECRET"
     value = "${random_id.clientSecret.hex}"
+  }
+
+  env {
+    key   = "ENABLE_AUTH_PROVIDER"
+    value = var.enable_gitlab
   }
 
   env {

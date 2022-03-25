@@ -1,0 +1,18 @@
+FROM rancher/k3s:latest AS k3s
+
+FROM alpine:latest
+COPY --from=k3s / /
+
+RUN apk add --no-cache bash curl
+RUN curl -fsSLO https://github.com/gitpod-io/gitpod/releases/latest/download/gitpod-installer-linux-amd64 \
+    && install -o root -g root gitpod-installer-linux-amd64 /usr/local/bin/gitpod-installer
+
+RUN chmod 1777 /tmp
+VOLUME /var/lib/kubelet
+VOLUME /var/lib/rancher/k3s
+VOLUME /var/lib/cni
+VOLUME /var/log
+ENV PATH="$PATH:/bin/aux"
+ENV CRI_CONFIG_FILE="/var/lib/rancher/k3s/agent/etc/crictl.yaml"
+ENTRYPOINT ["/bin/k3s"]
+CMD ["server", "--disable=traefik"]

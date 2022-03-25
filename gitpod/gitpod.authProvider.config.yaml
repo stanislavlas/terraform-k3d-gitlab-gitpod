@@ -1,0 +1,3 @@
+authProviders:
+  - kind: secret
+    name: gitlab-oauth
