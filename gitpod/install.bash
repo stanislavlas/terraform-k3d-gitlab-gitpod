@@ -16,14 +16,15 @@ kubectl create secret tls https-certificates \
     --cert="$CERTS/fullchain.pem" \
     --key="$CERTS/privkey.pem"
 
-PROVIDER=$(sed "s+<clientId>+${CLIENT_ID}+g; s+<clientSecret>+${CLIENT_SECRET}+g; s+<domain>+${DOMAIN}+" "gitpod/gitlab-oauth.yaml")
-kubectl create secret generic --from-literal=provider="$PROVIDER" gitlab-oauth
-
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.7.1/cert-manager.yaml
-
-curl -fsSLO https://github.com/gitpod-io/gitpod/releases/latest/download/gitpod-installer-linux-amd64
-install -o root -g root gitpod-installer-linux-amd64 /usr/local/bin/gitpod-installer
 sed "s+<domain>+${DOMAIN}+g" "gitpod/gitpod.config.yaml" > gitpod.config.yaml
+
+if [ "$ENABLE_AUTH_PROVIDER" = "true" ]
+then 
+    cat gitpod/gitpod.authProvider.config.yaml >> gitpod.config.yaml
+    PROVIDER=$(sed "s+<clientId>+${CLIENT_ID}+g; s+<clientSecret>+${CLIENT_SECRET}+g; s+<domain>+${DOMAIN}+" "gitpod/gitlab-oauth.yaml")
+    kubectl create secret generic --from-literal=provider="$PROVIDER" gitlab-oauth
+fi
 
 check_deployments "cert-manager"
 gitpod-installer render --config gitpod.config.yaml > gitpod.yaml

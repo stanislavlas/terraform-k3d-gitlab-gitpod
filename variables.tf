@@ -40,3 +40,18 @@ variable "k3d_disable_load_balancer" {
     type        = bool
     default     = true
 }
+
+variable "enable_nginx" {
+    type        = bool
+    default     = true
+}
+
+variable "enable_gitpod" {
+    type        = bool
+    default     = true
+}
+
+variable "enable_gitlab" {
+    type        = bool
+    default     = true
+}
