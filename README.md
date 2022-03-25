@@ -34,7 +34,7 @@ $ docker run -it --rm --name certbot \
 ```
 
 ## Installation
-Deployment and installation is done by [Terraform](https://www.terraform.io/). It creates two [k3d](https://k3d.io/) clusters, one for [GitLab](https://gitlab.com) (on port `1443`), and another for [Gitpod](https://gitpod.io) (on port `2443`). On top of that, it creates [nginx](https://www.nginx.com/) reverse proxy that listens on port `443` of the host machine and route communication to appropriate cluster. The configuration is stored in the `terraform.tfvars`. Make sure the config file contains correct values!
+Deployment and installation is done by [Terraform](https://www.terraform.io/). It creates two [k3d](https://k3d.io/) clusters, one for [GitLab](https://gitlab.com) (on port `1443`), and another for [Gitpod](https://gitpod.io) (on port `2443`). On top of that, it creates [nginx](https://www.nginx.com/) reverse proxy that listens on port `443` of the host machine and route communication to appropriate cluster. The configuration is stored in the `terraform.tfvars`. In configuration is possible to disable [GitLab](https://gitlab.com), [Gitpod](https://gitpod.io), or [nginx](https://www.nginx.com/) instalation. Make sure the config file contains correct values!
 
 ```
 terraform init
