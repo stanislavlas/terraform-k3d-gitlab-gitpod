@@ -1,5 +1,4 @@
 apiVersion: v1
-authProviders: []
 blockNewUsers:
   enabled: false
   passlist: []
@@ -13,8 +12,6 @@ database:
   inCluster: true
 domain: gitpod.<domain>
 imagePullSecrets: null
-jaegerOperator:
-  inCluster: true
 kind: Full
 metadata:
   region: local
