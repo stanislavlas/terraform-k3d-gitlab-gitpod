@@ -1,11 +1,15 @@
-FROM rancher/k3s:latest AS k3s
+FROM ubuntu:latest
 
-FROM alpine:latest
-COPY --from=k3s / /
+RUN apt-get update && \
+    apt-get install -y curl containerd
 
-RUN apk add --no-cache bash curl
-RUN curl -fsSLO https://github.com/gitpod-io/gitpod/releases/latest/download/gitpod-installer-linux-amd64 \
-    && install -o root -g root gitpod-installer-linux-amd64 /usr/local/bin/gitpod-installer
+RUN curl -LO https://github.com/k3s-io/k3s/releases/download/v1.23.5-rc5%2Bk3s1/k3s && chmod 755 k3s && mv k3s /bin/
+
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && rm kubectl
+
+RUN curl -fsSLO https://github.com/gitpod-io/gitpod/releases/latest/download/gitpod-installer-linux-amd64 && \
+    install -o root -g root gitpod-installer-linux-amd64 /usr/local/bin/gitpod-installer
 
 RUN chmod 1777 /tmp
 VOLUME /var/lib/kubelet
@@ -14,5 +18,5 @@ VOLUME /var/lib/cni
 VOLUME /var/log
 ENV PATH="$PATH:/bin/aux"
 ENV CRI_CONFIG_FILE="/var/lib/rancher/k3s/agent/etc/crictl.yaml"
-ENTRYPOINT ["/bin/k3s"]
-CMD ["server", "--disable=traefik"]
+ENTRYPOINT ["k3s"]
+CMD ["server"]
