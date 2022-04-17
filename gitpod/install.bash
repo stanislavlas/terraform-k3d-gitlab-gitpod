@@ -33,4 +33,9 @@ kubectl apply -f gitpod.yaml
 
 check_deployments "default"
 
+if [ "$ENABLE_OBSERVABILITY" = "true" ]
+then
+    ./observability/install.bash
+fi
+
 echo "Gitpod is ready to use on gitpod.${DOMAIN}"

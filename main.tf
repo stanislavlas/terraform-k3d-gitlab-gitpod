@@ -141,9 +141,34 @@ resource "k3d_cluster" "gitpod" {
     destination = "/certs"
   }
 
+    volume {
+    source      = "${var.volumes_host_path}/observability"
+    destination = "/observability"
+  }
+
   port {
     host_port      = var.gitpod_host_port
     container_port = 443
+  }
+
+  port {
+    host_port      = 8080
+    container_port = 8080
+  }
+
+  port {
+    host_port      = 30000
+    container_port = 30000
+  }
+
+  port {
+    host_port      = 31000
+    container_port = 31000
+  }
+
+  port {
+    host_port      = 32000
+    container_port = 32000
   }
 
   env {
@@ -164,6 +189,11 @@ resource "k3d_cluster" "gitpod" {
   env {
     key   = "DOMAIN"
     value = var.domain
+  }
+
+  env {
+    key   = "ENABLE_OBSERVABILITY"
+    value = var.enable_observability
   }
 
   k3d {

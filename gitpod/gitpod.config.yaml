@@ -23,8 +23,8 @@ repository: eu.gcr.io/gitpod-core-dev/build
 workspace:
   resources:
     requests:
-      cpu: "1"
-      memory: 2Gi
+      cpu: "0.25"
+      memory: 0.5Gi
   runtime:
     containerdRuntimeDir: /run/k3s/containerd/io.containerd.runtime.v2.task/k8s.io
     containerdSocket: /run/k3s/containerd/containerd.sock

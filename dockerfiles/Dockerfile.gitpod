@@ -3,7 +3,7 @@ FROM rancher/k3s:latest AS k3s
 FROM alpine:latest
 COPY --from=k3s / /
 
-RUN apk add --no-cache bash curl
+RUN apk add --no-cache bash curl git
 RUN curl -fsSLO https://github.com/gitpod-io/gitpod/releases/latest/download/gitpod-installer-linux-amd64 \
     && install -o root -g root gitpod-installer-linux-amd64 /usr/local/bin/gitpod-installer
 

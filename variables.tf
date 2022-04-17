@@ -55,3 +55,8 @@ variable "enable_gitlab" {
     type        = bool
     default     = true
 }
+
+variable "enable_observability" {
+    type        = bool
+    default     = true
+}
